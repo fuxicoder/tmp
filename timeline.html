@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #474e5d;
+            font-family: Helvetica, sans-serif;
+        }
+
+        /* The actual timeline (the vertical ruler) */
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* The actual timeline (the vertical ruler) */
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: white;
+            top: 0;
+            bottom: 0;
+            left: 200px;
+            margin-left: -3px;
+        }
+
+        /* Container around content */
+        .container {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 70%;
+        }
+
+        /* The circles on the timeline */
+        .container::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            margin-left: 6.5px;
+            background-color: white;
+            border: 4px solid #FF9F55;
+            top: 20px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        /* Place the container to the right */
+        .right {
+            left: 200px;
+        }
+
+        /* Add arrows to the right container (pointing left) */
+        .right::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: 30px;
+            border: medium solid white;
+            border-width: 10px 10px 10px 0;
+            border-color: transparent white transparent transparent;
+        }
+
+        /* Fix the circle for containers on the right side */
+        .right::after {
+            left: -16px;
+        }
+
+        /* The actual content */
+        .content {
+            padding: 5px 30px;
+            background-color: white;
+            position: relative;
+            border-radius: 6px;
+        }
+        .content spam{
+            position: absolute;
+            left: -210px;
+            top: 10px;
+        }
+        .moredata {
+            position: absolute;
+            background-color: white;
+            padding: 5px 30px;
+            left: 30%;
+        }
+    </style>
+    <script type="text/javascript">
+        /* 加载页面调用函数 */
+        function attachEvents() {
+            document.getElementById("timeline_div").style.display="none";
+
+            getMoreData();
+        }
+        window.onload = attachEvents;
+
+        /* 解析页面参数 todo jquery 与 angularjs 有替代函数 */
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+        /* 获取数据函数 */
+        function getMoreData() {
+            div_timeline_content = document.getElementById("timeline_div").cloneNode(true);
+            setInnerText(div_timeline_content.getElementsByTagName("spam")[0], "19700101 12:00:00");
+            setInnerText(div_timeline_content.getElementsByTagName("p")[0], "hello word!");
+            div_timeline_content.style.display="block";
+            document.getElementsByClassName("timeline")[0].appendChild(div_timeline_content);
+
+            console.log(getUrlParam("deviceMac"));
+            console.log(getUrlParam("objectMac"));
+        }
+        /* 兼容浏览器 */
+        function setInnerText(element, text) {
+            console.log(typeof  element.textContent)
+            if (typeof  element.textContent == "string") {
+                element.textContent = text;
+            } else {
+                element.innerText = text;
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div class="timeline">
+    <div class="container right"  id="timeline_div">
+        <div class="content">
+            <spam  id="timeline_time">20170610 12:00:00</spam>
+            <p id="timeline_content">test</p>
+        </div>
+    </div>
+</div>
+<div class="moredata" type="button" onclick="getMoreData()" >get more data</div>
+</body>
+</html>
